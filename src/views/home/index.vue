@@ -3,8 +3,8 @@
     <div class="top">
       <p class="title">{{ fileName }}</p>
       <van-button type="primary" size="small" @click="handleRefreshClick">刷新</van-button>
-      <div class="sheets">
-        <span v-for="sheet in workbook.SheetNames" :key="sheet">{{ sheet }}</span>
+      <div class="sheets" v-if="workbook">
+        <span class="item" v-for="sheet in workbook.SheetNames" :key="sheet">{{ sheet }}</span>
       </div>
     </div>
     <div class="content" ref="xlsx"></div>
@@ -148,21 +148,25 @@ export default {
         const wb = xlsx.read(buffer);
         const ws = wb.Sheets[wb.SheetNames[0]];
         const data = xlsx.utils.sheet_to_json(ws);
+        // const data = xlsx.utils.sheet_to_html(ws);
         this.sheets = wb.sheets;
         workbook = wb;
         this.workbook = wb;
-        console.log("开始渲染xlxs到页面");
+        console.log("开始渲染xlxs到页面", data);
         canvasDatagrid({ parentNode: xlsxEl, data, editable: false });
+        // xlsxEl.innerHTML = data;
       } else {
         try {
           const wb = xlsx.read(await (await fetch(xlsxUrl)).arrayBuffer());
           const ws = wb.Sheets[wb.SheetNames[0]];
           const data = xlsx.utils.sheet_to_json(ws);
+          // const data = xlsx.utils.sheet_to_html(ws);
           this.sheets = wb.sheets;
           workbook = wb;
           this.workbook = wb;
-          console.log("开始渲染xlxs到页面");
+          console.log("开始渲染xlxs到页面", data);
           canvasDatagrid({ parentNode: xlsxEl, data, editable: false });
+          // xlsxEl.innerHTML = data;
         } catch (e) {
           window.alert("预览失败：" + e.message);
         }
@@ -197,7 +201,14 @@ export default {
   .title {
     text-align: center;
   }
-  .sheets {}
+  .sheets {
+    .item {
+      display: inline-block;
+      margin: 0;
+      padding: 5px;
+      font-size: 14px;
+    }
+  }
 }
 .content {
   padding-top: 50px;
