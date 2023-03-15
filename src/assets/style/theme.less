@@ -1,0 +1,47 @@
+.theme(@backcolor:#2A90FE,@fontcolor:#2A90FE,@btnColor:#2A90FE){
+    .theme-fontcolor{
+        color:@fontcolor
+    }
+    .theme-backcolor{
+      background-color:@backcolor
+    }
+    .theme-buttoncolor-primary{
+        color:@btnColor;
+        border:1px solid @btnColor
+     }
+    .theme-buttoncolor{
+       border:1px solid @btnColor;
+       background-color:@btnColor;
+       color: white;
+    }
+
+    // vant 样式修改
+    .van-button--danger,.van-submit-bar__button--danger{
+      background-color: @btnColor;
+      border-color: @btnColor;
+      background: @btnColor;
+    }
+    .van-address-item .van-radio__icon--checked .van-icon{
+      background-color: @btnColor;
+      border-color: @btnColor;
+    }
+    .van-tag--danger{
+      background-color: @btnColor;
+    }
+    .van-button--default {
+      color: @btnColor;
+      background-color: #fff;
+      border: 1px solid @btnColor;
+   }
+   .van-submit-bar__price{
+     color: @fontcolor;
+   }
+   .van-cell {
+    .van-cell__title.van-field__label {
+      // width: auto;
+    }
+  }
+}
+
+ 
+ 
