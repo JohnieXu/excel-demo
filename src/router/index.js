@@ -7,7 +7,8 @@ const routes = [
   {
     path: "/",
     name: "RedirectHome",
-    component: () => import("../views/redirecthome"),
+    // component: () => import("../views/redirecthome"),
+    redirect: "/home",
     meta: { index: 1, title: "登录" }
   },
   {
