@@ -12,7 +12,7 @@ import { indexDoc, isInWxEnv } from "Utils/appconfig";
 import * as xlsx from "xlsx";
 import canvasDatagrid from "canvas-datagrid";
 
-const xlsxUrl = "/files/营销平台版本需求开发计划.xlsx";
+const xlsxUrl = indexDoc + "/files/营销平台版本需求开发计划.xlsx";
 
 export default {
   name: "ViewHome",
@@ -72,9 +72,8 @@ export default {
         const data = xlsx.utils.sheet_to_json(ws);
         canvasDatagrid({ parentNode: xlsxEl, data, editable: false });
       } catch (e) {
-        window.alert('预览失败：' + e.message);
+        window.alert("预览失败：" + e.message);
       }
-
     }
   }
 };
