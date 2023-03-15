@@ -12,7 +12,7 @@ import { indexDoc, isInWxEnv } from "Utils/appconfig";
 import * as xlsx from "xlsx";
 import canvasDatagrid from "canvas-datagrid";
 
-const xlsxUrl = indexDoc + "/files/营销平台版本需求开发计划.xlsx";
+const xlsxUrl = "/" + indexDoc + "/files/营销平台版本需求开发计划.xlsx";
 
 export default {
   name: "ViewHome",
