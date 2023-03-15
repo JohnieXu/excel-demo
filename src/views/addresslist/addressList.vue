@@ -16,7 +16,10 @@
                   alt=""
                 />
               </div>
-              <div>{{ item.province }}{{ item.city }}{{ item.district }}{{ item.addrDetail }}</div>
+              <div>
+                {{ item.province }}{{ item.city }}{{ item.district
+                }}{{ item.addrDetail }}
+              </div>
             </div>
           </div>
           <div class="editAddr">

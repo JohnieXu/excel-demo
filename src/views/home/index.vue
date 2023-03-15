@@ -1,11 +1,19 @@
 <template>
-  <div class="container"></div>
+  <div class="container">
+    <div ref="xlsx"></div>
+  </div>
 </template>
 <script>
+/* eslint-disable no-unused-vars */
 import { mapGetters } from "vuex";
 import { merNo, merType, big_data_code, appId } from "Utils/appconfig.js";
 import { indexDoc, isInWxEnv } from "Utils/appconfig";
 // import { login } from "Mixin/login.js";
+import * as xlsx from "xlsx";
+import canvasDatagrid from "canvas-datagrid";
+
+const xlsxUrl = "/files/营销平台版本需求开发计划.xlsx";
+
 export default {
   name: "ViewHome",
   // mixins: [login],
@@ -23,6 +31,9 @@ export default {
     // if (isInWxEnv) {
     //   this.imgHanldle();
     // }
+  },
+  mounted() {
+    this.loadXlsx();
   },
   methods: {
     // 跳转图片处理  登录认证参数地址栏传输 在返回接受
@@ -52,6 +63,18 @@ export default {
       location.replace(
         this.photo_edit + "/#/card-type-bg-choose?inParams=" + url
       ); // fix: CTOB-1833 code ben used
+    },
+    async loadXlsx() {
+      const xlsxEl = this.$refs.xlsx;
+      try {
+        const wb = xlsx.read(await (await fetch(xlsxUrl)).arrayBuffer());
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const data = xlsx.utils.sheet_to_json(ws);
+        canvasDatagrid({ parentNode: xlsxEl, data, editable: false });
+      } catch (e) {
+        window.alert('预览失败：' + e.message);
+      }
+
     }
   }
 };

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -117,25 +119,25 @@ function cancleShare() {
   }
 }
 // eslint-disable-next-line
-router.afterEach((to, from) => {
-  console.log("cancleShare---------");
-  cancleShare();
-});
+// router.afterEach((to, from) => {
+//   console.log("cancleShare---------");
+//   cancleShare();
+// });
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
 
-if (process.env.VUE_APP_VERSION_SHOW === "1") {
-  import("vconsole").then(Vconsole => {
-    try {
-      new Vconsole.default();
-    } catch (error) {
-      console.log(error);
-    }
-  });
-}
+// if (process.env.VUE_APP_VERSION_SHOW === "1") {
+//   import("vconsole").then(Vconsole => {
+//     try {
+//       new Vconsole.default();
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   });
+// }
 
 function initBigData() {
   window._hmt = [];

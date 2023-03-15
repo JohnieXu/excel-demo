@@ -36,7 +36,11 @@
         <div class="address-item">
           <div class="text">所在地区</div>
           <div class="city" @click="openAddrDialog">
-            <span v-if="formData.province && formData.city && formData.district">{{ formData.province }}/{{ formData.city }}/{{ formData.district }}</span>
+            <span v-if="formData.province && formData.city && formData.district"
+              >{{ formData.province }}/{{ formData.city }}/{{
+                formData.district
+              }}</span
+            >
             <span v-else></span>
             <div class="right-icon">
               <van-icon name="arrow" size="0.34rem" />
@@ -120,20 +124,20 @@ import { getStore as getStoreLocal } from "Utils/localstore";
  * }
  */
 
-const str2Array = (str) => {
-  return str.split(',')
-}
+const str2Array = str => {
+  return str.split(",");
+};
 
-const text2Obj = (text) => {
+const text2Obj = text => {
   return {
     text,
     value: text
-  }
-}
+  };
+};
 
 const districtArr = [
   // 山东省-济南市 青岛市 淄博市 枣庄市 东营市 烟台市 潍坊市 济宁市 泰安市 威海市 日照市 临沂市 德州市 聊城市 滨州市 菏泽市
-  // 济南：历下区 市中区 槐荫区 天桥区 历城区 长清区 章丘区 济阳区 莱芜区 钢城区 平阴县 商河县 
+  // 济南：历下区 市中区 槐荫区 天桥区 历城区 长清区 章丘区 济阳区 莱芜区 钢城区 平阴县 商河县
   {
     text: "山东省",
     value: "山东省",
@@ -141,82 +145,114 @@ const districtArr = [
       {
         text: "济南市",
         value: "济南市",
-        children: str2Array("历下区,市中区,槐荫区,天桥区,历城区,长清区,章丘区,济阳区,莱芜区,钢城区,平阴县,商河县,高新区").map(text2Obj),
+        children: str2Array(
+          "历下区,市中区,槐荫区,天桥区,历城区,长清区,章丘区,济阳区,莱芜区,钢城区,平阴县,商河县,高新区"
+        ).map(text2Obj)
       },
       {
         text: "青岛市",
         value: "青岛市",
-        children: str2Array("市南区,市北区,黄岛区,崂山区,李沧区,城阳区,即墨区,青岛高新技术产业开发区,胶州市,平度市,莱西市,开发区").map(text2Obj),
+        children: str2Array(
+          "市南区,市北区,黄岛区,崂山区,李沧区,城阳区,即墨区,青岛高新技术产业开发区,胶州市,平度市,莱西市,开发区"
+        ).map(text2Obj)
       },
       {
         text: "淄博市",
         value: "淄博市",
-        children: str2Array("淄川区,张店区,博山区,临淄区,周村区,桓台县,高青县,沂源县").map(text2Obj),
+        children: str2Array(
+          "淄川区,张店区,博山区,临淄区,周村区,桓台县,高青县,沂源县"
+        ).map(text2Obj)
       },
       {
         text: "枣庄市",
         value: "枣庄市",
-        children: str2Array("市中区,薛城区,峄城区,台儿庄区,山亭区,滕州市").map(text2Obj),
+        children: str2Array("市中区,薛城区,峄城区,台儿庄区,山亭区,滕州市").map(
+          text2Obj
+        )
       },
       {
         text: "东营市",
         value: "东营市",
-        children: str2Array("东营区,河口区,垦利区,利津县,广饶县,东营经济技术开发区,东营港经济开发区").map(text2Obj),
+        children: str2Array(
+          "东营区,河口区,垦利区,利津县,广饶县,东营经济技术开发区,东营港经济开发区"
+        ).map(text2Obj)
       },
       {
         text: "烟台市",
         value: "烟台市",
-        children: str2Array("芝罘区,福山区,牟平区,莱山区,长岛县,烟台高新技术产业开发区,烟台经济技术开发区,龙口市,莱阳市,莱州市,蓬莱市,招远市,栖霞市,海阳市,开发区").map(text2Obj),
+        children: str2Array(
+          "芝罘区,福山区,牟平区,莱山区,长岛县,烟台高新技术产业开发区,烟台经济技术开发区,龙口市,莱阳市,莱州市,蓬莱市,招远市,栖霞市,海阳市,开发区"
+        ).map(text2Obj)
       },
       {
         text: "潍坊市",
         value: "潍坊市",
-        children: str2Array("潍城区,寒亭区,坊子区,奎文区,临朐县,昌乐县,潍坊滨海经济技术开发区,青州市,诸城市,寿光市,安丘市,高密市,昌邑市,开发区,高新区").map(text2Obj),
+        children: str2Array(
+          "潍城区,寒亭区,坊子区,奎文区,临朐县,昌乐县,潍坊滨海经济技术开发区,青州市,诸城市,寿光市,安丘市,高密市,昌邑市,开发区,高新区"
+        ).map(text2Obj)
       },
       {
         text: "济宁市",
         value: "济宁市",
-        children: str2Array("任城区,兖州区,微山县,鱼台县,金乡县,嘉祥县,汶上县,泗水县,梁山县,济宁高新技术产业开发区,曲阜市,邹城市,高新区").map(text2Obj),
+        children: str2Array(
+          "任城区,兖州区,微山县,鱼台县,金乡县,嘉祥县,汶上县,泗水县,梁山县,济宁高新技术产业开发区,曲阜市,邹城市,高新区"
+        ).map(text2Obj)
       },
       {
         text: "泰安市",
         value: "泰安市",
-        children: str2Array("泰山区,岱岳区,宁阳县,东平县,新泰市,肥城市").map(text2Obj),
+        children: str2Array("泰山区,岱岳区,宁阳县,东平县,新泰市,肥城市").map(
+          text2Obj
+        )
       },
       {
         text: "威海市",
         value: "威海市",
-        children: str2Array("环翠区,文登区,荣成市,乳山市,经济技术开发区").map(text2Obj),
+        children: str2Array("环翠区,文登区,荣成市,乳山市,经济技术开发区").map(
+          text2Obj
+        )
       },
       {
         text: "日照市",
         value: "日照市",
-        children: str2Array("东港区,岚山区,五莲县,莒县,日照经济技术开发区").map(text2Obj),
+        children: str2Array("东港区,岚山区,五莲县,莒县,日照经济技术开发区").map(
+          text2Obj
+        )
       },
       {
         text: "临沂市",
         value: "临沂市",
-        children: str2Array("兰山区,罗庄区,河东区,沂南县,郯城县,沂水县,兰陵县,费县,平邑县,莒南县,蒙阴县,临沭县,临沂高新技术产业开发区").map(text2Obj),
+        children: str2Array(
+          "兰山区,罗庄区,河东区,沂南县,郯城县,沂水县,兰陵县,费县,平邑县,莒南县,蒙阴县,临沭县,临沂高新技术产业开发区"
+        ).map(text2Obj)
       },
       {
         text: "德州市",
         value: "德州市",
-        children: str2Array("德城区,陵城区,宁津县,庆云县,临邑县,齐河县,平原县,夏津县,武城县,德州运河经济开发区,乐陵市,禹城市").map(text2Obj),
+        children: str2Array(
+          "德城区,陵城区,宁津县,庆云县,临邑县,齐河县,平原县,夏津县,武城县,德州运河经济开发区,乐陵市,禹城市"
+        ).map(text2Obj)
       },
       {
         text: "聊城市",
         value: "聊城市",
-        children: str2Array("东昌府区,茌平区,阳谷县,莘县,东阿县,冠县,高唐县,临清市").map(text2Obj),
+        children: str2Array(
+          "东昌府区,茌平区,阳谷县,莘县,东阿县,冠县,高唐县,临清市"
+        ).map(text2Obj)
       },
       {
         text: "滨州市",
         value: "滨州市",
-        children: str2Array("滨城区,沾化区,惠民县,阳信县,无棣县,博兴县,邹平市").map(text2Obj),
+        children: str2Array(
+          "滨城区,沾化区,惠民县,阳信县,无棣县,博兴县,邹平市"
+        ).map(text2Obj)
       },
       {
         text: "菏泽市",
         value: "菏泽市",
-        children: str2Array("牡丹区,定陶区,曹县,单县,成武县,巨野县,郓城县,鄄城县,东明县,菏泽经济技术开发区,菏泽高新技术开发区").map(text2Obj),
+        children: str2Array(
+          "牡丹区,定陶区,曹县,单县,成武县,巨野县,郓城县,鄄城县,东明县,菏泽经济技术开发区,菏泽高新技术开发区"
+        ).map(text2Obj)
       }
     ]
   },
@@ -227,11 +263,13 @@ const districtArr = [
       {
         text: "天津市",
         value: "天津市",
-        children: str2Array("和平区,河东区,河西区,南开区,河北区,红桥区,东丽区,西青区,津南区,北辰区,武清区,宝坻区,滨海新区,宁河区,静海区,蓟州区").map(text2Obj),
-      },
+        children: str2Array(
+          "和平区,河东区,河西区,南开区,河北区,红桥区,东丽区,西青区,津南区,北辰区,武清区,宝坻区,滨海新区,宁河区,静海区,蓟州区"
+        ).map(text2Obj)
+      }
     ]
-  },
-]
+  }
+];
 
 const Reg = /\\/;
 export default {
@@ -377,12 +415,12 @@ export default {
       }, 2000);
     },
     onFinish(selected) {
-      const province = selected.selectedOptions[0].value
-      const city = selected.selectedOptions[1].value
-      const district = selected.selectedOptions[2].value
+      const province = selected.selectedOptions[0].value;
+      const city = selected.selectedOptions[1].value;
+      const district = selected.selectedOptions[2].value;
 
-      this.formData.province = province
-      this.formData.city = city
+      this.formData.province = province;
+      this.formData.city = city;
       this.formData.district = district;
       this.isShowAddrDialog = false;
     },

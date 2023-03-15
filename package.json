@@ -14,17 +14,19 @@
     "@whty/vue-pdf": "^1.0.1",
     "@whty/xtjk-ui": "0.0.5",
     "axios": "^0.19.2",
+    "canvas-datagrid": "^0.4.5",
     "core-js": "^3.6.5",
     "js-md5": "^0.7.3",
     "lib-flexible": "^0.3.2",
     "mobile-detect": "^1.4.4",
-    "pdfjs-dist": "^2.5.207",
+    "pdfjs-dist": "^3.4.120",
     "qs": "^6.9.4",
     "vant": "^2.12.46",
     "vconsole": "^3.3.4",
     "vue": "^2.7.0",
     "vue-router": "^3.4.3",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.18",
