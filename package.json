@@ -26,7 +26,7 @@
     "vue": "^2.7.0",
     "vue-router": "^3.4.3",
     "vuex": "^3.4.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.18",
