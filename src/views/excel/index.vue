@@ -83,7 +83,7 @@ export default {
           await this.waitUIUpdate();
           xlsxPreview.init(buffer, el, {
             width: "100%",
-            height: "calc(100vh - 40px)"
+            height: "calc(100vh - 40px - 4px)"
           });
           this.sheetNames = xlsxPreview.getSheetNames();
           this.loading = false;
@@ -148,10 +148,10 @@ export default {
     left: 0;
     width: 100%;
     height: @head-height;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: flex-start;
+    // align-items: center;
     &__item {
       flex: 0;
       margin: 5px;
