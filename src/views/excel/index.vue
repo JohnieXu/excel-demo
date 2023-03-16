@@ -6,7 +6,7 @@
     <div class="loading" v-show="parseLoading">
       <p>解析文件中...</p>
     </div>
-    <div v-show="!loading">
+    <div v-show="!loading && !parseLoading">
       <!-- <div v-if="isShowSheet" class="sheet">
         <div
           class="sheet__item"
