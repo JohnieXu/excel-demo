@@ -147,4 +147,4 @@ function initBigData() {
   const s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 }
-initBigData();
+// initBigData();

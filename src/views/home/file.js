@@ -5,13 +5,14 @@ import axios from "axios";
  * @param {String} fileUrl 文件完整路径
  * @returns {Promise<Buffer>} data
  */
-export const getFileBuffer = fileUrl => {
+export const getFileBuffer = (fileUrl, onDownloadProgress) => {
   return new Promise((resolve, reject) => {
     axios
       .get(fileUrl, {
         withCredentials: true,
         responseType: "arraybuffer",
-        timeout: 1000 * 60 * 60
+        timeout: 1000 * 60 * 60,
+        onDownloadProgress: onDownloadProgress ? onDownloadProgress : null
       })
       .then(res => {
         resolve(res.data);

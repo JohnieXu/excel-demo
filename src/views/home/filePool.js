@@ -9,6 +9,7 @@ export default class FilePool {
     "./files/工行信用卡权益车商户清单文件.xls"
   ];
   _index = -1;
+
   random() {
     let index = this._index;
     if (++index > this._files.length) {
@@ -18,8 +19,13 @@ export default class FilePool {
     }
     return this._files[index] ? this._files[index] : this.random();
   }
+
   last() {
     return this._files[this._files.length - 1];
+  }
+
+  one(index) {
+    return this._files[index] ? this._files[index] : null;
   }
 
   getInstance() {}

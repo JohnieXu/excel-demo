@@ -108,7 +108,7 @@ const routes = [
     meta: { index: 1, title: "登录", requireAuth: false }
   },
   {
-    path: "/excel",
+    path: "/excel/:index",
     name: "excel",
     component: () => import("../views/excel"),
     meta: { index: 1, title: "Excel", requireAuth: false }

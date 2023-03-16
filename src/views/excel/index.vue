@@ -1,10 +1,10 @@
 <template>
   <div class="excel">
     <div class="loading" v-show="loading">
-      <p>loading</p>
+      <p>加载中... {{ loadProgress }}</p>
     </div>
     <div v-show="!loading">
-      <div v-if="isShowSheet" class="sheet">
+      <!-- <div v-if="isShowSheet" class="sheet">
         <div
           class="sheet__item"
           v-for="sheet in sheetNames"
@@ -13,7 +13,20 @@
         >
           {{ sheet }}
         </div>
-      </div>
+      </div> -->
+      <van-tabs
+        v-if="isShowSheet"
+        class="sheet"
+        color="#2d88e7"
+        @click="handleSheetClick"
+      >
+        <van-tab
+          v-for="sheet in sheetNames"
+          :name="sheet"
+          :title="sheet"
+          :key="sheet"
+        ></van-tab>
+      </van-tabs>
       <div
         ref="content"
         class="content"
@@ -36,6 +49,7 @@ export default {
   data() {
     return {
       loading: false,
+      loadProgress: '',
       sheetNames: []
     };
   },
@@ -45,25 +59,56 @@ export default {
     }
   },
   mounted() {
-    const el = this.$refs.content;
-    this.loading = true;
-    this.loadFile()
-      .then(buffer => {
-        xlsxPreview.init(buffer, el, {
-          width: "100%",
-          height: "calc(100vh - 40px)"
-        });
-        this.sheetNames = xlsxPreview.getSheetNames();
-        this.loading = false;
-      })
-      .catch(e => {
-        console.log(e);
-        this.loading = false;
-      });
+    this.init();
+    window.init = this.init;
+  },
+  watch: {
+    $route(route, o) {
+      if (route.params.index !== o.params.index) {
+        this.init();
+      }
+    }
   },
   methods: {
+    init() {
+      const el = this.$refs.content;
+      this.loading = true;
+      this.loadFile()
+        .then(buffer => {
+          xlsxPreview.init(buffer, el, {
+            width: "100%",
+            height: "calc(100vh - 40px)"
+          });
+          this.sheetNames = xlsxPreview.getSheetNames();
+          this.loading = false;
+        })
+        .catch(e => {
+          console.log(e);
+          this.loading = false;
+        });
+    },
     loadFile() {
-      return getFileBuffer(filePool.random());
+      return new Promise((resolve, reject) => {
+        const index = this.$route.params.index;
+        const url = filePool.one(index);
+        if (!url) {
+          reject(new Error("文件不存在"));
+        } else {
+          console.log("开始加载文件：" + url);
+          return getFileBuffer(url, this.onDownloadProgress).then(resolve);
+        }
+      });
+    },
+    onDownloadProgress(e) {
+      const { loaded, total } = e;
+      if (total) {
+        const progress = Math.floor(loaded / total * 100);
+        console.log(progress, e);
+        this.updateProgress(progress);
+      }
+    },
+    updateProgress(progress) {
+      this.loadProgress = '' + progress + '%';
     },
     handleSheetClick(sheetName) {
       xlsxPreview.showSheet(sheetName);
@@ -95,8 +140,16 @@ export default {
   }
   .content {
     &__has_sheet {
-      padding-top: @head-height;
+      padding-top: @head-height + 4px;
     }
+  }
+  .loading {
+    width: 100%;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

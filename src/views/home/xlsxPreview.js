@@ -5,7 +5,14 @@ export default class XlsxPreview {
   _workbook = null;
   _grid = null;
   debug = true;
+  _removeChild(el) {
+    if (el) {
+      this._debug("开始清除之前生成的DOM节点");
+      el.firstElementChild && el.removeChild(el.firstElementChild);
+    }
+  }
   _initGrid(style, ...args) {
+    this._removeChild(args[0] && args[0].parentNode);
     this._grid = canvasDatagrid(...args);
     if (style) {
       this._grid.style.width = style.width || "100%";
@@ -31,7 +38,9 @@ export default class XlsxPreview {
       throw new Error("workbook not initialized");
     }
     const SheetNames = this._workbook.SheetNames;
-    this._debug("开始展示sheet：" + sheetName);
+    this._debug(
+      "开始展示sheet：" + (sheetName || this._workbook.SheetNames[0])
+    );
     let sheet = null;
     if (!sheetName) {
       sheet = this._workbook.Sheets[SheetNames[0]];
