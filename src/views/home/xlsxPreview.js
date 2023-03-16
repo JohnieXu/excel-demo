@@ -21,6 +21,7 @@ export default class XlsxPreview {
   }
   init(buffer, el, style, ...gridOptions) {
     this._initGrid(style, { parentNode: el, editable: false, ...gridOptions });
+    this._debug("开始解析字节流为workbook");
     const wb = xlsx.read(buffer);
 
     this._workbook = wb;

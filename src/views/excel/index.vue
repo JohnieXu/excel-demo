@@ -1,7 +1,10 @@
 <template>
   <div class="excel">
     <div class="loading" v-show="loading">
-      <p>加载中... {{ loadProgress }}</p>
+      <p>加载文件中... {{ loadProgress }}</p>
+    </div>
+    <div class="loading" v-show="parseLoading">
+      <p>解析文件中...</p>
     </div>
     <div v-show="!loading">
       <!-- <div v-if="isShowSheet" class="sheet">
@@ -48,8 +51,9 @@ export default {
   name: "ExcelView",
   data() {
     return {
-      loading: false,
-      loadProgress: '',
+      loading: false, // 文件下载loading
+      parseLoading: false, // 文件解析loading
+      loadProgress: "",
       sheetNames: []
     };
   },
@@ -74,18 +78,35 @@ export default {
       const el = this.$refs.content;
       this.loading = true;
       this.loadFile()
-        .then(buffer => {
+        .then(async buffer => {
+          this.showParseLoading();
+          await this.waitUIUpdate();
           xlsxPreview.init(buffer, el, {
             width: "100%",
             height: "calc(100vh - 40px)"
           });
           this.sheetNames = xlsxPreview.getSheetNames();
           this.loading = false;
+          this.parseLoading = false;
         })
         .catch(e => {
           console.log(e);
           this.loading = false;
+          this.parseLoading = false;
         });
+    },
+    // 等待视图渲染更新
+    waitUIUpdate() {
+      return new Promise(resolve => {
+        this.$nextTick().then(() => {
+          setTimeout(resolve, 0);
+        });
+      });
+    },
+    // 关闭下载文件进度提示并打开解析文件提示
+    showParseLoading() {
+      this.loading = false;
+      this.parseLoading = true;
     },
     loadFile() {
       return new Promise((resolve, reject) => {
@@ -102,13 +123,13 @@ export default {
     onDownloadProgress(e) {
       const { loaded, total } = e;
       if (total) {
-        const progress = Math.floor(loaded / total * 100);
+        const progress = Math.floor((loaded / total) * 100);
         console.log(progress, e);
         this.updateProgress(progress);
       }
     },
     updateProgress(progress) {
-      this.loadProgress = '' + progress + '%';
+      this.loadProgress = "" + progress + "%";
     },
     handleSheetClick(sheetName) {
       xlsxPreview.showSheet(sheetName);
