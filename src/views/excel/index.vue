@@ -44,9 +44,12 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 import FilePool from "@/common/xlsx/filePool";
 import XlsxPreview from "@/common/xlsx/xlsxPreview";
 import { getFileBuffer } from "@/common/xlsx/file";
+
+window.XlsxPreview = XlsxPreview;
 
 const filePool = new FilePool();
 const xlsxPreview = new XlsxPreview();
@@ -76,11 +79,20 @@ export default {
       if (route.params.index !== o.params.index) {
         this.init();
       }
+      if (route.query.type !== o.query.type) {
+        this.init();
+      }
     }
   },
   methods: {
     init() {
       const el = this.$refs.content;
+
+      // 根据路由参数切换表格渲染模式
+      const renderType = this.$route.query.type;
+      if (Object.keys(XlsxPreview.RENDER_TYPE).includes(renderType)) {
+        xlsxPreview.setRenderType(renderType);
+      }
       this.loading = true;
       this.loadFile()
         .then(async buffer => {
@@ -95,7 +107,6 @@ export default {
           this.parseLoading = false;
         })
         .catch(e => {
-          console.log(e);
           this.showReload();
           this.loading = false;
           this.parseLoading = false;
@@ -136,7 +147,7 @@ export default {
       const { loaded, total } = e;
       if (total) {
         const progress = Math.floor((loaded / total) * 100);
-        console.log(progress, e);
+        // console.log(progress, e);
         this.updateProgress(progress);
       }
     },

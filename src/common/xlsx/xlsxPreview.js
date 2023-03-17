@@ -6,11 +6,20 @@ import { log } from "./log";
 // TODO: 需处理副作用
 import "handsontable/dist/handsontable.full.min.css";
 
+const RENDER_TYPE = {
+  grid: "grid", // canvasDatagrid
+  hot: "hot" // handsontable
+};
+
 export default class XlsxPreview {
+  constructor({ renderType = RENDER_TYPE.grid } = {}) {
+    this._renderType = renderType;
+  }
+  static RENDER_TYPE = RENDER_TYPE;
   _workbook = null;
   _grid = null;
   _hot = null;
-  _renderType = "handsontable"; // handsontable canvasDatagrid
+  _renderType = RENDER_TYPE.grid;
   _removeChild(el) {
     if (el) {
       this._debug("开始清除之前生成的DOM节点");
@@ -46,7 +55,8 @@ export default class XlsxPreview {
     });
   }
   init(buffer, el, style, ...gridOptions) {
-    if (this._renderType === "handsontable") {
+    this._debug("表格渲染类型为 " + this._renderType);
+    if (this._renderType === RENDER_TYPE.hot) {
       this._initTable(style, {
         parentNode: el,
         editable: false,
@@ -65,6 +75,23 @@ export default class XlsxPreview {
     this._workbook = wb;
 
     this.showSheet();
+  }
+  setRenderType(renderType) {
+    if (!Object.keys(RENDER_TYPE).includes(renderType)) {
+      throw new Error(
+        `renderType should be one of [${Object.keys(RENDER_TYPE).join(
+          ", "
+        )}], but got ${renderType}`
+      );
+    }
+    if (this._renderType === RENDER_TYPE.hot && this._hot) {
+      throw new Error("can't change renderType after init");
+    }
+    if (this._renderType === RENDER_TYPE.grid && this._grid) {
+      throw new Error("can't change renderType after init");
+    }
+    this._debug("切换表格渲染类型为 " + renderType);
+    this._renderType = renderType;
   }
   getSheetNames() {
     if (!this._workbook) {
@@ -96,7 +123,7 @@ export default class XlsxPreview {
     return xlsx.utils.sheet_to_json(sheet);
   }
   _updateGridData(data) {
-    if (this._renderType === "handsontable") {
+    if (this._renderType === RENDER_TYPE.hot) {
       if (!this._hot) {
         throw new Error("grid not initialized");
       }
