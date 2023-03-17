@@ -1,10 +1,10 @@
 import * as xlsx from "xlsx";
 import canvasDatagrid from "canvas-datagrid";
+import { log } from "./log";
 
 export default class XlsxPreview {
   _workbook = null;
   _grid = null;
-  debug = true;
   _removeChild(el) {
     if (el) {
       this._debug("开始清除之前生成的DOM节点");
@@ -64,8 +64,6 @@ export default class XlsxPreview {
     this._grid.data = data;
   }
   _debug(...args) {
-    if (this.debug) {
-      console.log(...args);
-    }
+    log.log(...args);
   }
 }

@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import FilePool from "../home/filePool";
-import XlsxPreview from "../home/xlsxPreview";
-import { getFileBuffer } from "../home/file";
+import FilePool from "@/common/xlsx/filePool";
+import XlsxPreview from "@/common/xlsx/xlsxPreview";
+import { getFileBuffer } from "@/common/xlsx/file";
 
 const filePool = new FilePool();
 const xlsxPreview = new XlsxPreview();

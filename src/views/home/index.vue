@@ -26,8 +26,8 @@ import { indexDoc, isInWxEnv } from "Utils/appconfig";
 // import { login } from "Mixin/login.js";
 import * as xlsx from "xlsx";
 import canvasDatagrid from "canvas-datagrid";
-import XlsxPreview from "./xlsxPreview";
-import FilePool from "./filePool";
+import XlsxPreview from "@/common/xlsx/xlsxPreview";
+import FilePool from "@/common/xlsx/filePool";
 
 import axios from "axios";
 
