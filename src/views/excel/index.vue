@@ -6,7 +6,11 @@
     <div class="loading" v-show="parseLoading">
       <p>解析文件中...</p>
     </div>
-    <div v-show="!loading && !parseLoading">
+    <div class="reload" v-show="isShowReload">
+      <p class="desc">加载失败，请点击重试！</p>
+      <button class="button" @click="handleReloadClick">重新加载</button>
+    </div>
+    <div v-show="!loading && !parseLoading && !isShowReload">
       <!-- <div v-if="isShowSheet" class="sheet">
         <div
           class="sheet__item"
@@ -53,6 +57,7 @@ export default {
     return {
       loading: false, // 文件下载loading
       parseLoading: false, // 文件解析loading
+      isShowReload: false, // 是否展示失败重试
       loadProgress: "",
       sheetNames: []
     };
@@ -91,6 +96,7 @@ export default {
         })
         .catch(e => {
           console.log(e);
+          this.showReload();
           this.loading = false;
           this.parseLoading = false;
         });
@@ -107,6 +113,12 @@ export default {
     showParseLoading() {
       this.loading = false;
       this.parseLoading = true;
+    },
+    showReload() {
+      this.isShowReload = true;
+    },
+    closeReload() {
+      this.isShowReload = false;
     },
     loadFile() {
       return new Promise((resolve, reject) => {
@@ -133,6 +145,11 @@ export default {
     },
     handleSheetClick(sheetName) {
       xlsxPreview.showSheet(sheetName);
+    },
+    handleReloadClick() {
+      this.loadProgress = "";
+      this.closeReload();
+      this.init();
     }
   }
 };
@@ -140,6 +157,7 @@ export default {
 
 <style lang="less" scoped>
 @head-height: 40px;
+@color-primary: #2d88e7;
 
 .excel {
   .sheet {
@@ -171,6 +189,31 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .reload {
+    width: 100%;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .desc {
+      font-size: 14px;
+      color: #333;
+    }
+    .button {
+      outline: none;
+      appearance: none;
+      background-color: @color-primary;
+      padding: 8px 14px;
+      font-size: 14px;
+      color: #fff;
+      border-radius: 14px;
+      margin: 0;
+      border: none;
+      margin-top: 50px;
+    }
   }
 }
 </style>
