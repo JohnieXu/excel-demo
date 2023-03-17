@@ -1,10 +1,16 @@
 import * as xlsx from "xlsx";
 import canvasDatagrid from "canvas-datagrid";
+import Handsontable from "handsontable";
 import { log } from "./log";
+
+// TODO: 需处理副作用
+import "handsontable/dist/handsontable.full.min.css";
 
 export default class XlsxPreview {
   _workbook = null;
   _grid = null;
+  _hot = null;
+  _renderType = "handsontable"; // handsontable canvasDatagrid
   _removeChild(el) {
     if (el) {
       this._debug("开始清除之前生成的DOM节点");
@@ -14,14 +20,45 @@ export default class XlsxPreview {
   _initGrid(style, ...args) {
     this._removeChild(args[0] && args[0].parentNode);
     this._debug("init with options", ...args);
+    // canvasDatagrid会在当前 element 下放插入新的 element
     this._grid = canvasDatagrid(...args);
     if (style) {
       this._grid.style.width = style.width || "100%";
       this._grid.style.height = style.height || "100%";
     }
   }
+  _initTable(style, ...args) {
+    const el = (args[0] || {}).parentNode;
+    this._removeChild(args[0] && el);
+    this._debug("init with options", ...args);
+
+    // handsontable会将当前 element 直接替换
+    const child = document.createElement("div");
+    el.appendChild(child);
+
+    this._hot = new Handsontable(child, {
+      rowHeaders: true,
+      colHeaders: true,
+      readOnly: true,
+      width: style && style.width ? style.width : "auto",
+      height: style && style.height ? style.height : "auto",
+      licenseKey: "non-commercial-and-evaluation" // for non-commercial use only
+    });
+  }
   init(buffer, el, style, ...gridOptions) {
-    this._initGrid(style, { parentNode: el, editable: false, ...gridOptions[0] });
+    if (this._renderType === "handsontable") {
+      this._initTable(style, {
+        parentNode: el,
+        editable: false,
+        ...gridOptions[0]
+      });
+    } else {
+      this._initGrid(style, {
+        parentNode: el,
+        editable: false,
+        ...gridOptions[0]
+      });
+    }
     this._debug("开始解析字节流为workbook");
     const wb = xlsx.read(buffer);
 
@@ -51,6 +88,7 @@ export default class XlsxPreview {
     } else {
       sheet = this._workbook.Sheets[sheetName];
     }
+    // FIXME: handsontable 切换s heet 数据时主线程会卡顿
     this._updateGridData(this._sheet2Json(sheet));
   }
   _sheet2Json(sheet) {
@@ -58,11 +96,19 @@ export default class XlsxPreview {
     return xlsx.utils.sheet_to_json(sheet);
   }
   _updateGridData(data) {
-    if (!this._grid) {
-      throw new Error("grid not initialized");
+    if (this._renderType === "handsontable") {
+      if (!this._hot) {
+        throw new Error("grid not initialized");
+      }
+      this._debug("开始更新grid.data");
+      this._hot.updateData(data);
+    } else {
+      if (!this._grid) {
+        throw new Error("grid not initialized");
+      }
+      this._debug("开始更新grid.data");
+      this._grid.data = data;
     }
-    this._debug("开始更新grid.data");
-    this._grid.data = data;
   }
   _debug(...args) {
     log.log(...args);

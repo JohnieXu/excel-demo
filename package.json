@@ -16,6 +16,7 @@
     "axios": "^0.19.2",
     "canvas-datagrid": "^0.4.5",
     "core-js": "^3.6.5",
+    "handsontable": "^12.3.1",
     "js-md5": "^0.7.3",
     "lib-flexible": "^0.3.2",
     "mobile-detect": "^1.4.4",
