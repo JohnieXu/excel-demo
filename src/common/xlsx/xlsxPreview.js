@@ -13,6 +13,7 @@ export default class XlsxPreview {
   }
   _initGrid(style, ...args) {
     this._removeChild(args[0] && args[0].parentNode);
+    this._debug("init with options", ...args);
     this._grid = canvasDatagrid(...args);
     if (style) {
       this._grid.style.width = style.width || "100%";
@@ -20,7 +21,7 @@ export default class XlsxPreview {
     }
   }
   init(buffer, el, style, ...gridOptions) {
-    this._initGrid(style, { parentNode: el, editable: false, ...gridOptions });
+    this._initGrid(style, { parentNode: el, editable: false, ...gridOptions[0] });
     this._debug("开始解析字节流为workbook");
     const wb = xlsx.read(buffer);
 
