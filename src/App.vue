@@ -6,8 +6,6 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
-import { SET_THEME_IMG_PATH } from "Store/mutation-types";
 export default {
   name: "app",
   data() {
@@ -19,8 +17,6 @@ export default {
     this.cancleShare();
   },
   mounted() {
-    document.getElementById("app").className = "theme-2A90FE";
-    this.initTheme();
     this.removeIndexLoading();
   },
   computed: {
@@ -42,37 +38,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([SET_THEME_IMG_PATH]),
     removeIndexLoading() {
       const indexLoading = document.getElementById("indexLoading");
       if (indexLoading) {
         indexLoading.parentNode.removeChild(indexLoading);
-      }
-    },
-    initTheme() {
-      document.getElementById("app").className = "theme-2A90FE";
-      this.SET_THEME_IMG_PATH("img2");
-      // setTimeout(() => {
-      //   this.SET_THEME_IMG_PATH("img2");
-      // }, 4000);
-    },
-    onBridgeReady() {
-      window.WeixinJSBridge.call("hideOptionMenu");
-    },
-    cancleShare() {
-      if (typeof WeixinJSBridge === "undefined") {
-        if (document.addEventListener) {
-          document.addEventListener(
-            "WeixinJSBridgeReady",
-            this.onBridgeReady,
-            false
-          );
-        } else if (document.attachEvent) {
-          document.attachEvent("WeixinJSBridgeReady", this.onBridgeReady);
-          document.attachEvent("onWeixinJSBridgeReady", this.onBridgeReady);
-        }
-      } else {
-        this.onBridgeReady();
       }
     }
   }

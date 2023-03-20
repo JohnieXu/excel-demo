@@ -4,7 +4,6 @@ export default class FilePool {
     "./files/北京农行开发计划.xls",
     "./files/平安银行开发计划.xls",
     "./files/恒丰合伙人二期改造计划.xlsx",
-    "./files/恒丰合伙人二期改造计划(黄成).xlsx",
     "./files/营销平台版本需求开发计划2.xlsx",
     "./files/工行信用卡权益车商户清单文件.xls"
   ];
