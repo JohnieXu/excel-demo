@@ -6,20 +6,29 @@ import { log } from "./log";
 // TODO: 需处理副作用
 import "handsontable/dist/handsontable.full.min.css";
 
-const RENDER_TYPE = {
+export const RENDER_TYPE = {
   grid: "grid", // canvasDatagrid
   hot: "hot" // handsontable
 };
 
+/**
+ * Excel 文件预览
+ * 使用方法: new XlsxPreview().init(buffer, el, style)
+ * 切换表格 sheet: xlsxPreview.showSheet(sheetName)
+ * _ 开头的方法约定为类私有方法
+ */
 export default class XlsxPreview {
-  constructor({ renderType = RENDER_TYPE.grid } = {}) {
+  constructor({ renderType = XlsxPreview.RENDER_TYPE.grid } = {}) {
     this._renderType = renderType;
   }
-  static RENDER_TYPE = RENDER_TYPE;
+  static RENDER_TYPE = {
+    grid: "grid", // canvasDatagrid
+    hot: "hot" // handsontable
+  };
   _workbook = null;
   _grid = null;
   _hot = null;
-  _renderType = RENDER_TYPE.grid;
+  _renderType = XlsxPreview.RENDER_TYPE.grid;
   _removeChild(el) {
     if (el) {
       this._debug("开始清除之前生成的DOM节点");
@@ -54,9 +63,31 @@ export default class XlsxPreview {
       licenseKey: "non-commercial-and-evaluation" // for non-commercial use only
     });
   }
+  _sheet2Json(sheet) {
+    this._debug("开始转换sheet数据");
+    return xlsx.utils.sheet_to_json(sheet);
+  }
+  _updateGridData(data) {
+    if (this._renderType === XlsxPreview.RENDER_TYPE.hot) {
+      if (!this._hot) {
+        throw new Error("grid not initialized");
+      }
+      this._debug("开始更新grid.data");
+      this._hot.updateData(data);
+    } else {
+      if (!this._grid) {
+        throw new Error("grid not initialized");
+      }
+      this._debug("开始更新grid.data");
+      this._grid.data = data;
+    }
+  }
+  _debug(...args) {
+    log.log(...args);
+  }
   init(buffer, el, style, ...gridOptions) {
     this._debug("表格渲染类型为 " + this._renderType);
-    if (this._renderType === RENDER_TYPE.hot) {
+    if (this._renderType === XlsxPreview.RENDER_TYPE.hot) {
       this._initTable(style, {
         parentNode: el,
         editable: false,
@@ -77,28 +108,37 @@ export default class XlsxPreview {
     this.showSheet();
   }
   setRenderType(renderType) {
-    if (!Object.keys(RENDER_TYPE).includes(renderType)) {
+    if (!Object.keys(XlsxPreview.RENDER_TYPE).includes(renderType)) {
       throw new Error(
-        `renderType should be one of [${Object.keys(RENDER_TYPE).join(
-          ", "
-        )}], but got ${renderType}`
+        `renderType should be one of [${Object.keys(
+          XlsxPreview.RENDER_TYPE
+        ).join(", ")}], but got ${renderType}`
       );
     }
-    if (this._renderType === RENDER_TYPE.hot && this._hot) {
+    if (this._renderType === XlsxPreview.RENDER_TYPE.hot && this._hot) {
       throw new Error("can't change renderType after init");
     }
-    if (this._renderType === RENDER_TYPE.grid && this._grid) {
+    if (this._renderType === XlsxPreview.RENDER_TYPE.grid && this._grid) {
       throw new Error("can't change renderType after init");
     }
     this._debug("切换表格渲染类型为 " + renderType);
     this._renderType = renderType;
   }
+  /**
+   * 获取 excel 文件的 sheet 名称
+   * @returns {Object}
+   */
   getSheetNames() {
     if (!this._workbook) {
       throw new Error("workbook not initialized");
     }
     return JSON.parse(JSON.stringify(this._workbook.SheetNames));
   }
+  /**
+   * 切换展示对应 sheet 数据
+   * @param {string} sheetName sheet 名称
+   * TODO: 切换 sheet 添加加载中效果
+   */
   showSheet(sheetName) {
     if (!this._workbook) {
       throw new Error("workbook not initialized");
@@ -115,29 +155,7 @@ export default class XlsxPreview {
     } else {
       sheet = this._workbook.Sheets[sheetName];
     }
-    // FIXME: handsontable 切换s heet 数据时主线程会卡顿
+    // FIXME: handsontable 切换 sheet 数据时主线程会卡顿
     this._updateGridData(this._sheet2Json(sheet));
-  }
-  _sheet2Json(sheet) {
-    this._debug("开始转换sheet数据");
-    return xlsx.utils.sheet_to_json(sheet);
-  }
-  _updateGridData(data) {
-    if (this._renderType === RENDER_TYPE.hot) {
-      if (!this._hot) {
-        throw new Error("grid not initialized");
-      }
-      this._debug("开始更新grid.data");
-      this._hot.updateData(data);
-    } else {
-      if (!this._grid) {
-        throw new Error("grid not initialized");
-      }
-      this._debug("开始更新grid.data");
-      this._grid.data = data;
-    }
-  }
-  _debug(...args) {
-    log.log(...args);
   }
 }

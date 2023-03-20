@@ -3,6 +3,7 @@ import axios from "axios";
 /**
  * 获取网络文件buffer
  * @param {String} fileUrl 文件完整路径
+ * @param {Function} onDownloadProgress 下载进度回调
  * @returns {Promise<Buffer>} data
  */
 export const getFileBuffer = (fileUrl, onDownloadProgress) => {
